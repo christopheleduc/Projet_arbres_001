@@ -60,9 +60,25 @@ def csv2Dict(fichiercsv):
 
     with open(fichiercsv, newline='', encoding = 'utf-8') as fcsv:
         lecteur = csv.DictReader(fcsv)
-        for dico in lecteur:
-            print(dico)
+        # for dico in lecteur:
+            # print(dico)
+    fcsv.close
     return lecteur
+
+# Une petite fonction qui convertit un CSV en Dict.
+def csv2Diction(fichiercsv):
+    # Variables
+    dicoReturn = {}
+    a = 0
+
+    with open(fichiercsv, newline='', encoding = 'utf-8') as fcsv:
+        lecteur = csv.DictReader(fcsv)
+        for dico in lecteur:
+            # print(dico)
+            dicoReturn[a] = dico
+            a += 1
+    fcsv.close
+    return dicoReturn
 
 # Une petite fonction qui affiche les cle du Dict.
 # et les deux premières lignes
@@ -75,6 +91,7 @@ def cle4Dict(fichiercsv):
         print (row)
         row = lecteur.__next__()
         print (row)
+        fcsv.close
     return lecteur
 
 # Une petite fonction qui enregistre les années de plantaion dans une liste.
@@ -86,11 +103,12 @@ def year2List(fichiercsv):
         lecteur = csv.DictReader(fcsv)
         for dico in lecteur:
             liste.append (dico.get('ANNEEDEPLANTATION'))
+        fcsv.close
     return liste
 
 # Fonction qui enlève les valeurs vide de la liste
 def cleanList(list2Clean):
-    #Variable
+    #Variables
     list2Return = []
     n=0
 
@@ -111,6 +129,17 @@ def str_list_to_int_list(str_list):
         str_list[n] = int(str_list[n])
         n += 1
     return(str_list)
+
+# Fonction qui retourne une liste des arbres plantés à partir d'une année
+def myBrothersTree(realDic, annee):
+    # Variable
+    olderMe = []
+
+    for value in realDic.values():
+    # print(value.get('ANNEEDEPLANTATION'))
+        if value.get('ANNEEDEPLANTATION') >= str(annee):
+            olderMe.append(value.get('ANNEEDEPLANTATION'))
+    return olderMe
 
 ListArbres = (fileobj.read())
 print (ListArbres)
@@ -196,3 +225,20 @@ print('Plus vieille arbre planté: ', plusVieux)
 periode = a-b
 moyenneNbArbesP = nbArbres/periode
 print('Moyenne d\'arbre par an, planté sur ', periode, ' années: ', moyenneNbArbesP)
+
+print(etoiles)
+
+dataDict = csv2Dict(arbres)
+
+structureDic = {}
+
+structureDic = csv2Diction(arbres)
+
+print(structureDic.get(5))
+
+print(etoiles)
+
+combienDeFreres = myBrothersTree(structureDic, 1970)
+
+print('Nb d\'arbres plantés depuis 1970: {0}  \r\n'.format(len(combienDeFreres)))
+
